@@ -1,0 +1,13 @@
+{
+  "name": "jquery.pageguide",
+  "version": "1.0.0",
+  "main": "js/jquery.pageguide.js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components"
+  ],
+  "dependencies": {
+    "jquery": "1.10.0"
+  }
+}
