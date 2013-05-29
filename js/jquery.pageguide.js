@@ -569,9 +569,13 @@
                     this._scrollIntoView(newItem);
                 }
 
-                this.$message.not(':visible').show().animate({
+                this.$message.not(':visible').show();
+                this.$message.stop().animate({
                     'height': '100px'
-                }, 500);
+                }, {
+                    duration: 500,
+                    queue: false
+                });
 
                 this._rollNumber($('span', this.$message), $(newItem).children('ins').html(), left);
 
