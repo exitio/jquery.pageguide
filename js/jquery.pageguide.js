@@ -181,6 +181,7 @@
             autoAdvanceInterval: null,
             loadingSelector: null,
             pulse: true,
+            inline: false,
             events: {},
             step: {
                 direction: 'left',
@@ -499,6 +500,9 @@
                 $('ins').remove();
                 $('body').removeClass('pageguide-open');
 
+                if (this.settings.inline) {
+                    this.$visibleItems.find('.pageguide-content').hide();
+                }
                 this.$visibleItems.trigger('hide.pageguide');
                 this.$wrapper.trigger('close.pageguide');
 
@@ -555,9 +559,75 @@
 
                 this.curIdx = newIdx;
 
+                if (this.settings.inline) {
+                    this.$visibleItems.find('.pageguide-content').hide();
+
+                    $(newItem).find('.pageguide-content').show();
+                }
+
                 $('div', this.$message).html($(newItem).children('div').html());
                 this.$visibleItems.removeClass("pageguide-active");
                 $(newItem).addClass("pageguide-active");
+
+                if (this.settings.inline) {
+                    var that = this;
+                    // Position the floating indicators
+                    this.$visibleItems.each(function() {
+                        var arrow = $(this),
+                            settings = $.extend(true, {}, that.settings.step, $(this).data('options') || {}),
+                            target = $(arrow.data('tourtarget')),
+                            setLeft = target.offset().left + parseInt(settings.arrow.offsetX, 10),
+                            setTop = target.offset().top + parseInt(settings.arrow.offsetY, 10);
+
+                        if (arrow.hasClass("pageguide-top")) {
+                            setTop -= 60;
+                        } else if (arrow.hasClass("pageguide-bottom")) {
+                            setTop += target.outerHeight() + 15;
+                        } else {
+                            setTop += 5;
+                        }
+
+                        if (arrow.hasClass("pageguide-right")) {
+                            setLeft += target.outerWidth(false) + 15;
+                        } else if (arrow.hasClass("pageguide-left")) {
+                            setLeft -= 65;
+                        } else {
+                            setLeft += 5;
+                        }
+
+                        arrow.css({
+                            "left": setLeft + "px",
+                            "top": setTop + "px"
+                        });
+                    });
+
+                    var arrow = $(newItem),
+                        target = $(arrow.data('tourtarget')),
+                        setLeft = target.offset().left + parseInt(settings.arrow.offsetX, 10),
+                        setTop = target.offset().top + parseInt(settings.arrow.offsetY, 10),
+                        addLeft = 160 + 65;
+
+                    if (!arrow.hasClass("pageguide-active")) {
+                        addLeft = -addLeft;
+                    }
+
+                    if (arrow.hasClass("pageguide-top")) {
+                        setTop -= (arrow.find('.pageguide-content').height() * 2) + 20;
+                    } else if (arrow.hasClass("pageguide-bottom")) {
+                        setTop += target.outerHeight() + 20;
+                    }
+
+                    if (arrow.hasClass("pageguide-right")) {
+                        setLeft += target.outerWidth(false) + 25;
+                    } else if ($(newItem).hasClass("pageguide-left")) {
+                        setLeft -= addLeft;
+                    }
+
+                    arrow.css({
+                        'left': setLeft,
+                        'top': setTop
+                    });
+                }
 
                 if (settings.shadow) {
                     this._showShadow(newItem);
