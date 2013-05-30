@@ -398,7 +398,7 @@
 
                         $('<div/>', {
                             'class': 'pageguide-actions'
-                        }).append('<a class="pageguide-previous">previous</a>').append('<a class="pageguide-next">next</a>').appendTo(content_div);
+                        }).append('<a class="pageguide-back">previous</a>').append('<a class="pageguide-fwd">next</a>').appendTo(content_div);
                         content_div.prepend('<a class="pageguide-close">&times;</a>');
 
                         $guide.append($li);
@@ -775,7 +775,7 @@
                     }
                 }, this));
 
-                this.$message.on('click', '.pageguide-close', $.proxy(function(e) {
+                this.$wrapper.on('click', '.pageguide-close', $.proxy(function(e) {
                     this.close();
                 }, this));
 
