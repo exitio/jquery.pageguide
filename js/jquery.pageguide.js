@@ -775,7 +775,7 @@
                     }
                 }, this));
 
-                this.$wrapper.on('click', '.pageguide-close', $.proxy(function(e) {
+                this.$message.on('click', '.pageguide-close', $.proxy(function(e) {
                     this.close();
                 }, this));
 
@@ -847,6 +847,28 @@
                     }
 
                     this.showStep(newIdx);
+                }, this));
+
+                this.$guide.on('click', '.pageguide-close', $.proxy(function(e) {
+                    e.stopPropagation();
+
+                    this.close();
+                }, this));
+
+                /* interaction: fwd click */
+                this.$guide.on('click', '.pageguide-fwd', $.proxy(function(e) {
+                    e.stopPropagation();
+
+                    this.autoAdvance(false);
+                    this.next();
+                }, this));
+
+                /* interaction: back click */
+                this.$guide.on('click', '.pageguide-back', $.proxy(function(e) {
+                    e.stopPropagation();
+
+                    this.autoAdvance(false);
+                    this.previous();
                 }, this));
             },
 
