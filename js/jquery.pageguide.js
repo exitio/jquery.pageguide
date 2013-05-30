@@ -394,7 +394,12 @@
                             'class': 'pageguide-content'
                         }).html(this.content).appendTo($li);
 
-                        $li.find('.pageguide-content').prepend('<a class="pageguide-close">&times;</a>').append('<a class="pageguide-previous">previous</a>').append('<a class="pageguide-next">next</a>');
+                        var content_div = $li.find('.pageguide-content');
+
+                        $('<div/>', {
+                            'class': 'pageguide-actions'
+                        }).append('<a class="pageguide-previous">previous</a>').append('<a class="pageguide-next">next</a>').appendTo(content_div);
+                        content_div.prepend('<a class="pageguide-close">&times;</a>');
 
                         $guide.append($li);
                         this.elem = $li;
