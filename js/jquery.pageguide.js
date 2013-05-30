@@ -182,6 +182,7 @@
             loadingSelector: null,
             pulse: true,
             inline: false,
+            highlight: false,
             events: {},
             step: {
                 direction: 'left',
@@ -237,6 +238,10 @@
                     shadow = $('<div/>', {
                         id: 'pageGuideShadow',
                         'class': 'pageguide-shadow'
+                    }),
+                    backdrop = $('<div/>', {
+                        id: 'pageGuideBackdrop',
+                        'class': 'pageguide-backdrop'
                     });
 
                 toggle.append('page guide').append('<div><span class="pageguide-tourtitle"></span></div>').append('<a class="pageguide-close" title="Close Guide">close guide &raquo;</a>');
@@ -246,6 +251,7 @@
                 wrapper.append(toggle);
                 wrapper.append(message);
                 wrapper.append(shadow);
+                wrapper.append(backdrop);
                 $('body').append(wrapper);
 
                 this.$wrapper = wrapper;
@@ -388,6 +394,8 @@
                             'class': 'pageguide-content'
                         }).html(this.content).appendTo($li);
 
+                        $li.find('.pageguide-content').prepend('<a class="pageguide-close">&times;</a>').append('<a class="pageguide-previous">previous</a>').append('<a class="pageguide-next">next</a>');
+
                         $guide.append($li);
                         this.elem = $li;
                     });
@@ -465,6 +473,10 @@
                 this._onExpand();
                 this.$visibleItems.toggleClass('expanded', true);
 
+                if (this.settings.highlight) {
+                    this.$wrapper.find('.pageguide-backdrop').show();
+                }
+
                 this.$wrapper.trigger('open.pageguide');
                 this.$visibleItems.trigger('show.pageguide');
 
@@ -490,11 +502,13 @@
 
                 this.$toggle.removeClass('pageguide-toggle-open').addClass('pageguide-toggle-close');
 
-                this.$message.animate({
-                    height: "0"
-                }, 500, function() {
-                    $(this).hide();
-                });
+                if (!this.settings.inline) {
+                    this.$message.animate({
+                        height: "0"
+                    }, 500, function() {
+                        $(this).hide();
+                    });
+                }
 
                 /* clear number tags and shading elements */
                 $('ins').remove();
@@ -503,8 +517,18 @@
                 if (this.settings.inline) {
                     this.$visibleItems.find('.pageguide-content').hide();
                 }
+
                 this.$visibleItems.trigger('hide.pageguide');
                 this.$wrapper.trigger('close.pageguide');
+
+                if (this.settings.highlight) {
+                    this.$wrapper.find('.pageguide-backdrop').hide();
+                    this.$allItems.each(function() {
+                        var arrow = $(this),
+                            target = $(arrow.data('tourtarget'));
+                        target.removeClass('pageguide-target');
+                    });
+                }
 
                 return this;
             },
@@ -574,25 +598,40 @@
                     // Position the floating indicators
                     this.$visibleItems.each(function() {
                         var arrow = $(this),
-                            settings = $.extend(true, {}, that.settings.step, $(this).data('options') || {}),
-                            target = $(arrow.data('tourtarget')),
-                            setLeft = target.offset().left + parseInt(settings.arrow.offsetX, 10),
-                            setTop = target.offset().top + parseInt(settings.arrow.offsetY, 10);
+                        target = $(arrow.data('tourtarget')),
+                        setLeft = target.offset().left + parseInt(settings.arrow.offsetX, 10),
+                        setTop = target.offset().top + parseInt(settings.arrow.offsetY, 10);
 
-                        if (arrow.hasClass("pageguide-top")) {
-                            setTop -= 60;
-                        } else if (arrow.hasClass("pageguide-bottom")) {
-                            setTop += target.outerHeight() + 15;
-                        } else {
-                            setTop += 5;
-                        }
+                        if (this != newItem) {
+                            if (arrow.hasClass("pageguide-top")) {
+                                setTop -= 60;
+                            } else if (arrow.hasClass("pageguide-bottom")) {
+                                setTop += target.outerHeight() + 15;
+                            } else {
+                                setTop += 5;
+                            }
 
-                        if (arrow.hasClass("pageguide-right")) {
-                            setLeft += target.outerWidth(false) + 15;
-                        } else if (arrow.hasClass("pageguide-left")) {
-                            setLeft -= 65;
+                            if (arrow.hasClass("pageguide-right")) {
+                                setLeft += target.outerWidth(false) + 15;
+                            } else if (arrow.hasClass("pageguide-left")) {
+                                setLeft -= 65;
+                            } else {
+                                setLeft += 5;
+                            }
                         } else {
-                            setLeft += 5;
+                            var addLeft = 160 + 65;
+
+                            if (arrow.hasClass("pageguide-top")) {
+                                setTop -= (arrow.find('.pageguide-content').height() * 2) + 20;
+                            } else if (arrow.hasClass("pageguide-bottom")) {
+                                setTop += target.outerHeight() + 20;
+                            }
+
+                            if (arrow.hasClass("pageguide-right")) {
+                                setLeft += target.outerWidth(false) + 25;
+                            } else if ($(newItem).hasClass("pageguide-left")) {
+                                setLeft -= addLeft;
+                            }
                         }
 
                         arrow.css({
@@ -600,32 +639,18 @@
                             "top": setTop + "px"
                         });
                     });
+                }
 
-                    var arrow = $(newItem),
-                        target = $(arrow.data('tourtarget')),
-                        setLeft = target.offset().left + parseInt(settings.arrow.offsetX, 10),
-                        setTop = target.offset().top + parseInt(settings.arrow.offsetY, 10),
-                        addLeft = 160 + 65;
+                if (this.settings.highlight) {
+                    this.$visibleItems.each(function() {
+                        var arrow = $(this),
+                        target = $(arrow.data('tourtarget'));
 
-                    if (!arrow.hasClass("pageguide-active")) {
-                        addLeft = -addLeft;
-                    }
-
-                    if (arrow.hasClass("pageguide-top")) {
-                        setTop -= (arrow.find('.pageguide-content').height() * 2) + 20;
-                    } else if (arrow.hasClass("pageguide-bottom")) {
-                        setTop += target.outerHeight() + 20;
-                    }
-
-                    if (arrow.hasClass("pageguide-right")) {
-                        setLeft += target.outerWidth(false) + 25;
-                    } else if ($(newItem).hasClass("pageguide-left")) {
-                        setLeft -= addLeft;
-                    }
-
-                    arrow.css({
-                        'left': setLeft,
-                        'top': setTop
+                        if (this != newItem) {
+                            target.removeClass('pageguide-target');
+                        } else {
+                            target.addClass('pageguide-target');
+                        }
                     });
                 }
 
@@ -639,13 +664,15 @@
                     this._scrollIntoView(newItem);
                 }
 
-                this.$message.not(':visible').show();
-                this.$message.stop().animate({
-                    'height': '100px'
-                }, {
-                    duration: 500,
-                    queue: false
-                });
+                if (!this.settings.inline) {
+                    this.$message.not(':visible').show();
+                    this.$message.stop().animate({
+                        'height': '100px'
+                    }, {
+                        duration: 500,
+                        queue: false
+                    });
+                }
 
                 this._rollNumber($('span', this.$message), $(newItem).children('ins').html(), left);
 
