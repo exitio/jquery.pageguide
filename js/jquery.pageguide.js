@@ -244,7 +244,7 @@
                         'class': 'pageguide-backdrop'
                     });
 
-                toggle.append('page guide').append('<div><span class="pageguide-tourtitle"></span></div>').append('<a class="pageguide-close" title="Close Guide">close guide &raquo;</a>');
+                toggle.append('page tutorial').append('<div><span class="pageguide-tourtitle"></span></div>').append('<a class="pageguide-close" title="Close Guide">close guide &raquo;</a>');
                 message.append('<a class="pageguide-close" title="Close Guide">close</a>').append('<span class="pageguide-index"></span>').append('<div class="pageguide-content"></div>').append('<a class="pageguide-back" title="Previous">Previous</a>').append('<a class="pageguide-fwd" title="Next">Next</a>');
                 shadow.append('<span class="pageguide-shadow-pulse"></span>');
 
