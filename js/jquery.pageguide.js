@@ -630,12 +630,16 @@
                                 setTop -= (arrow.find('.pageguide-content').height() * 2) + 20;
                             } else if (arrow.hasClass("pageguide-bottom")) {
                                 setTop += target.outerHeight() + 20;
+                            } else {
+                                setTop += 5;
                             }
 
                             if (arrow.hasClass("pageguide-right")) {
                                 setLeft += target.outerWidth(false) + 25;
                             } else if ($(newItem).hasClass("pageguide-left")) {
                                 setLeft -= addLeft;
+                            } else {
+                                setLeft += 5;
                             }
                         }
 
@@ -705,20 +709,40 @@
                         setLeft = target.offset().left + parseInt(settings.arrow.offsetX, 10),
                         setTop = target.offset().top + parseInt(settings.arrow.offsetY, 10);
 
-                    if (arrow.hasClass("pageguide-top")) {
-                        setTop -= 60;
-                    } else if (arrow.hasClass("pageguide-bottom")) {
-                        setTop += target.outerHeight() + 15;
-                    } else {
-                        setTop += 5;
-                    }
+                    if (arrow.hasClass("pageguide-active")) {
+                        var addLeft = 160 + 65;
 
-                    if (arrow.hasClass("pageguide-right")) {
-                        setLeft += target.outerWidth(false) + 15;
-                    } else if (arrow.hasClass("pageguide-left")) {
-                        setLeft -= 65;
+                        if (arrow.hasClass("pageguide-top")) {
+                            setTop -= (arrow.find('.pageguide-content').height() * 2) + 20;
+                        } else if (arrow.hasClass("pageguide-bottom")) {
+                            setTop += target.outerHeight() + 20;
+                        } else {
+                            setTop += 5;
+                        }
+
+                        if (arrow.hasClass("pageguide-right")) {
+                            setLeft += target.outerWidth(false) + 25;
+                        } else if ($(newItem).hasClass("pageguide-left")) {
+                            setLeft -= addLeft;
+                        } else {
+                            setLeft += 5;
+                        }
                     } else {
-                        setLeft += 5;
+                        if (arrow.hasClass("pageguide-top")) {
+                            setTop -= 60;
+                        } else if (arrow.hasClass("pageguide-bottom")) {
+                            setTop += target.outerHeight() + 15;
+                        } else {
+                            setTop += 5;
+                        }
+
+                        if (arrow.hasClass("pageguide-right")) {
+                            setLeft += target.outerWidth(false) + 15;
+                        } else if (arrow.hasClass("pageguide-left")) {
+                            setLeft -= 65;
+                        } else {
+                            setLeft += 5;
+                        }
                     }
 
                     arrow.css({
