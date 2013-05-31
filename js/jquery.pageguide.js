@@ -584,7 +584,8 @@
                     oldItem = this.$visibleItems[oldIdx],
                     newItem = this.$visibleItems[newIdx],
                     left = (direction && direction !== 0) ? (direction > 0) ? true : false : (oldIdx > newIdx),
-                    settings = $.extend(true, {}, this.settings.step, $(newItem).data('options') || {});
+                    settings = $.extend(true, {}, this.settings.step, $(newItem).data('options') || {}),
+                    zIndex = settings.zIndex ? settings.zIndex : $($(this).data('tourtarget')).zIndex() + 2;
 
                 this.curIdx = newIdx;
 
@@ -596,6 +597,9 @@
 
                 $('div', this.$message).html($(newItem).children('div').html());
                 this.$visibleItems.removeClass("pageguide-active");
+
+                this.$visibleItems.css('z-index', zIndex);
+                $(newItem).css('z-index', zIndex + 1);
                 $(newItem).addClass("pageguide-active");
 
                 if (this.settings.inline) {
