@@ -709,7 +709,7 @@
                         setLeft = target.offset().left + parseInt(settings.arrow.offsetX, 10),
                         setTop = target.offset().top + parseInt(settings.arrow.offsetY, 10);
 
-                    if (this.settings.inline) {
+                    if (that.settings.inline) {
                         if (arrow.hasClass("pageguide-active")) {
                             var addLeft = 160 + 65;
 
