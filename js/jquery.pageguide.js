@@ -1008,6 +1008,12 @@
 
                 var scrollTo = ((eltop <= dvtop + mgn.top) || (elh > (dvh - mgnb))) ? eltop - mgn.top : (elbtm - (dvh - mgnb));
 
+                if (this.settings.inline) {
+                    if ($(elem).hasClass('pageguide-top')) {
+                        scrollTo = $(elem).offset().top - 15 < eltop - mgn.top ? $(elem).offset().top - 15 : scrollTo;
+                    }
+                }
+
                 $('html,body').animate({
                   scrollTop: scrollTo
                 }, {
