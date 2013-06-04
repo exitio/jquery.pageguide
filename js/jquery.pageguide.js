@@ -727,7 +727,7 @@
 
                             if (arrow.hasClass("pageguide-right")) {
                                 setLeft += target.outerWidth(false) + 25;
-                            } else if ($(newItem).hasClass("pageguide-left")) {
+                            } else if (arrow.hasClass("pageguide-left")) {
                                 setLeft -= addLeft;
                             } else {
                                 setLeft += 5;
