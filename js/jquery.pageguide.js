@@ -133,7 +133,7 @@
         // Browser globals
         factory(jQuery);
     }
-}(function($, undefined ) {
+}(function(undefined ) {
     "use strict";
 
     if ($.pageguide !== undefined) {
