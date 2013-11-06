@@ -125,15 +125,7 @@
 *
 */
 
-(function (factory) {
-    if (typeof define === 'function' && define.amd) {
-        // AMD. Register as an anonymous module.
-        define([], factory);
-    } else {
-        // Browser globals
-        factory(jQuery);
-    }
-}(function(undefined ) {
+(function($) {
     "use strict";
 
     if ($.pageguide !== undefined) {
@@ -1157,4 +1149,4 @@
 
         return pg ? pg.load(fn, options) : (pg = new PageGuide(fn, options));
     };
-}));
+});
