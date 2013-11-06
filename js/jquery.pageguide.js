@@ -1149,4 +1149,4 @@
 
         return pg ? pg.load(fn, options) : (pg = new PageGuide(fn, options));
     };
-});
+})(jQuery);
